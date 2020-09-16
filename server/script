@@ -1,0 +1,1 @@
+nodemon series/app.js & nodemon movies/app.js & nodemon orchestrator/src/index.js
