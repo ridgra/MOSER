@@ -1,38 +1,51 @@
 import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ADD_MOVIE, FETCH_MOVIES } from '../store/queries/movies';
+import { ADD_SERIES, FETCH_SERIES } from '../store/queries/series';
 
 export default () => {
   const history = useHistory();
-  const [title, setTitle] = useState();
-  const [overview, setOverview] = useState();
-  const [poster_path, setPoster_path] = useState();
-  const [popularity, setPopularity] = useState();
-  const [tags, setTags] = useState();
+  const [title, setTitle] = useState('');
+  const [overview, setOverview] = useState('');
+  const [poster_path, setPoster_path] = useState('');
+  const [popularity, setPopularity] = useState(0);
+  const [tags, setTags] = useState([]);
+  const { pathname } = useLocation();
 
-  const [addMovie, { data }] = useMutation(ADD_MOVIE, {
+  const [AddMovie] = useMutation(ADD_MOVIE, {
     refetchQueries: [{ query: FETCH_MOVIES }],
   });
 
-  console.log(title,
-        overview,
-        poster_path,
-        popularity,
-        tags, 'pop');
+  const [AddSeries] = useMutation(ADD_SERIES, {
+    refetchQueries: [{ query: FETCH_SERIES }],
+  });
 
   const handleClick = (evt) => {
     evt.preventDefault();
-    addMovie({
-      variables: {
-        title,
-        overview,
-        poster_path,
-        popularity,
-        tags,
-      },
-    });
-    history.push('/movies');
+    if (pathname.includes('movies')) {
+      AddMovie({
+        variables: {
+          title,
+          overview,
+          poster_path,
+          popularity,
+          tags,
+        },
+      });
+      history.push('/movies');
+    } else {
+      AddSeries({
+        variables: {
+          title,
+          overview,
+          poster_path,
+          popularity,
+          tags,
+        },
+      });
+      history.push('/series');
+    }
   };
   return (
     <div
@@ -41,9 +54,9 @@ export default () => {
     >
       <div className="form-container p-2 bg-light shadow-lg">
         <div className="image-holder"></div>
-        <form >
+        <form>
           <h2 className="text-center">
-            <strong>Add Movie</strong>
+            <strong>Add</strong>
           </h2>
           <div className="form-group">
             <input
@@ -95,7 +108,7 @@ export default () => {
               name="popularity"
               placeholder="Popularity"
               title="Popularity"
-              onChange={(e) => setPopularity(e.target.value)}
+              onChange={(e) => setPopularity(+e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -108,7 +121,7 @@ export default () => {
               name="tags"
               placeholder="Tags"
               title="Tags"
-              onChange={(e) => setTags(e.target.value)}
+              onChange={(e) => setTags(e.target.value.split(','))}
             />
           </div>
           <div className="form-group">

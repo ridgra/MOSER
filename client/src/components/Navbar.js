@@ -24,13 +24,13 @@ export default () => {
               </Link>
             </li>
             <li className="nav-item" role="presentation">
-              {/* <Link
+              <Link
                 className="nav-link active text-white-50 text-menu"
                 data-bs-hover-animate="swing"
                 to={'/series'}
               >
                 TV Series
-              </Link> */}
+              </Link>
             </li>
           </ul>
         </div>

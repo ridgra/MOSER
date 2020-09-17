@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_MOVIES = gql`
+export const FETCH_SERIES = gql`
   query {
-    fetchMovies {
+    fetchSeries {
       _id
       title
       overview
@@ -13,9 +13,9 @@ export const FETCH_MOVIES = gql`
   }
 `;
 
-export const FETCH_ONE_MOVIE = gql`
-  query fetchOneMovie($_id: ID) {
-    fetchOneMovie(_id: $_id) {
+export const FETCH_ONE_SERIES = gql`
+  query fetchOneSeries($_id: ID) {
+    fetchOneSeries(_id: $_id) {
       title
       overview
       poster_path
@@ -25,15 +25,15 @@ export const FETCH_ONE_MOVIE = gql`
   }
 `;
 
-export const ADD_MOVIE = gql`
-  mutation AddMovie(
+export const ADD_SERIES = gql`
+  mutation AddSeries(
     $title: String
     $overview: String
     $poster_path: String
     $popularity: Float
     $tags: [String]
   ) {
-    addMovie(
+    addSeries(
       title: $title
       overview: $overview
       poster_path: $poster_path
@@ -45,8 +45,8 @@ export const ADD_MOVIE = gql`
   }
 `;
 
-export const EDIT_MOVIE = gql`
-  mutation editMovie(
+export const EDIT_SERIES = gql`
+  mutation editSeries(
     $_id: ID
     $title: String
     $overview: String
@@ -54,7 +54,7 @@ export const EDIT_MOVIE = gql`
     $popularity: Float
     $tags: [String]
   ) {
-    editMovie(
+    editSeries(
       _id: $_id
       title: $title
       overview: $overview
@@ -67,9 +67,9 @@ export const EDIT_MOVIE = gql`
   }
 `;
 
-export const DELETE_MOVIE = gql`
-  mutation deleteMovie($_id: ID) {
-    deleteMovie(_id: $_id) {
+export const DELETE_SERIES = gql`
+  mutation deleteSeries($_id: ID) {
+    deleteSeries(_id: $_id) {
       _id
     }
   }

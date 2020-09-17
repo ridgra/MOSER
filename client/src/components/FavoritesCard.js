@@ -5,19 +5,6 @@ import { DELETE_MOVIE, FETCH_MOVIES } from '../store/queries/movies';
 import { favoritesVar } from '../store/cache';
 
 export default ({ data, loading }) => {
-  const [deleteMovie] = useMutation(DELETE_MOVIE, {
-    refetchQueries: [{ query: FETCH_MOVIES }],
-  });
-
-  const deleteHandler = (_id) => {
-    console.log(_id);
-    deleteMovie({
-      variables: {
-        _id,
-      },
-    });
-  };
-
   const removeFav = (id) => {
     const newFav = JSON.parse(JSON.stringify(favoritesVar()));
     const idx = newFav.findIndex((e) => e._id == id);
@@ -26,12 +13,6 @@ export default ({ data, loading }) => {
   };
 
   if (loading) return <></>;
-
-  const favoriteHandler = () => {
-    // favoritesVar([...favoritesVar(), data.fetchMovies]);
-  };
-
-  // console.log(data.fetchMovies, loading);
   return (
     <>
       {data.map((e) => {

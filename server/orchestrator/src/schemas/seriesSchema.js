@@ -25,8 +25,8 @@ const typeDefs = gql`
       title: String
       overview: String
       poster_path: String
-      popularity: String
-      tags: String
+      popularity: Float
+      tags: [String]
     ): Series
 
     editSeries(
@@ -34,8 +34,8 @@ const typeDefs = gql`
       title: String
       overview: String
       poster_path: String
-      popularity: String
-      tags: String
+      popularity: Float
+      tags: [String]
     ): Series
 
     deleteSeries(_id: ID): Series
@@ -54,8 +54,10 @@ const resolvers = {
       return data;
     },
     fetchOneSeries: async (_, args) => {
+      console.log('here');
       const { _id } = args;
       const { data } = await axios.get(baseUrl + _id);
+      await redis.del('series');
       return data;
     },
   },
@@ -66,7 +68,6 @@ const resolvers = {
       return data.ops[0];
     },
     editSeries: async (_, args) => {
-      console.log(args), '<<<';
       const { _id, title, overview, poster_path, popularity, tags } = args;
       const { data } = await axios.put(baseUrl + _id, {
         title,

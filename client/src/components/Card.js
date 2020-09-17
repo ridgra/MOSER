@@ -1,35 +1,47 @@
 import { useMutation } from '@apollo/client';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { DELETE_MOVIE, FETCH_MOVIES } from '../store/queries/movies';
 import { favoritesVar } from '../store/cache';
+import { DELETE_SERIES, FETCH_SERIES } from '../store/queries/series';
 
 export default ({ data, loading }) => {
+  const { pathname } = useLocation();
   const [deleteMovie] = useMutation(DELETE_MOVIE, {
     refetchQueries: [{ query: FETCH_MOVIES }],
   });
 
+  const [deleteSeries] = useMutation(DELETE_SERIES, {
+    refetchQueries: [{ query: FETCH_SERIES }],
+  });
+
   const deleteHandler = (_id) => {
-    console.log(_id);
-    deleteMovie({
-      variables: {
-        _id,
-      },
-    });
+    if (pathname.includes('movies')) {
+      deleteMovie({
+        variables: {
+          _id,
+        },
+      });
+    } else {
+      deleteSeries({
+        variables: {
+          _id,
+        },
+      });
+    }
   };
 
   if (loading) return <></>;
-  console.log(data.fetchMovies, 'favs');
   const favoriteHandler = (el) => {
+    const find = favoritesVar().find((e) => e._id == el._id);
+    if (find) return console.log('This item already exists');
     favoritesVar([...favoritesVar(), el]);
   };
 
-  console.log(data.fetchMovies, loading);
+  console.log(data, loading);
   return (
     <>
-      {data.fetchMovies.map((e) => {
-        // console.log(e._id);
-
+      {data.map((e) => {
         return (
           <div
             key={e._id}
@@ -45,7 +57,11 @@ export default ({ data, loading }) => {
                 className="d-md-flex align-items-md-center text-white-50"
                 style={{ position: 'absolute', right: '1em', top: '0' }}
               >
-                <Link to={`/movies/${e._id}/edit`}>
+                <Link
+                  to={`/${pathname == '/movies' ? 'movies' : 'series'}/${
+                    e._id
+                  }/edit`}
+                >
                   <i
                     className="icon ion-compose mr-2"
                     data-toggle="tooltip"
@@ -85,12 +101,16 @@ export default ({ data, loading }) => {
                   style={{ backgroundColor: 'rgba(128,132,149,0.45)' }}
                 />
                 <div>
-                  <span className="text-white-50 mr-2 font-weight-lighter">
-                    <em>Action</em>
-                  </span>
-                  <span className="text-white-50 mr-2 font-weight-lighter">
-                    <em>Action</em>
-                  </span>
+                  {e.tags.map((tag, idx) => {
+                    return (
+                      <span
+                        key={idx}
+                        className="text-white-50 mr-2 font-weight-lighter"
+                      >
+                        <em>{tag}</em>
+                      </span>
+                    );
+                  })}
                 </div>
                 <div className="d-flex justify-content-between pt-2">
                   <h6 className="text-white-50 d-inline mb-2">

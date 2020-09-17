@@ -5,6 +5,9 @@ const MovieClass = require('../models/movie');
 api.post('/', async (req, res) => {
   try {
     const { title, overview, poster_path, popularity, tags } = req.body;
+    // // tags = tags.split(',')
+    // console.log(tags);
+    // console.log(tags);
     const result = await MovieClass.create({
       title,
       overview,

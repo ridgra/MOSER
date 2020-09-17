@@ -1,38 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import Card from '../components/Card';
 import { gql, useQuery } from '@apollo/client';
-import { FETCH_MOVIES, DELETE_MOVIE } from '../store/queries/movies';
-// import { GET_FAVORITES } from '../store/queries/favorites';
+import { FETCH_MOVIES } from '../store/queries/movies';
+import { FETCH_SERIES } from '../store/queries/series';
 
 export default () => {
   const history = useHistory();
   const location = useLocation();
-  const { data, loading, error } = useQuery(FETCH_MOVIES);
+  console.log(history);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // const { data: fave, loading: ld, error: er } = useQuery(GET_FAVORITES, {
-  //   onCompleted() {
-  //     console.log(fave, '<<<');
-  //   },
-  // });
+  if (location.pathname == '/movies') {
+    const { data: fetcher, loading: load } = useQuery(FETCH_MOVIES, {
+      fetchPolicy: 'cache-and-network',
+      onCompleted() {
+        setData(fetcher.fetchMovies);
+        setLoading(load);
+      },
+    });
+  } else {
+    const { data: fetcher, loading: load } = useQuery(FETCH_SERIES, {
+      fetchPolicy: 'cache-and-network',
+      onCompleted() {
+        setData(fetcher.fetchSeries);
+        setLoading(load);
+      },
+    });
+  }
+
+  if (loading) return <></>;
 
   return (
     <div className="container">
       <div className="row">
         <div
-          className="col-4 d-md-flex justify-content-center align-items-center align-items-md-center"
+          className={
+            (!loading && data.length > 0 ? 'col-4' : 'col-12') +
+            ' d-md-flex justify-content-center align-items-center align-items-md-center'
+          }
           style={{ height: '90vh' }}
         >
           <div className="text-center">
             <h3 className="text1 m-auto">
-              Add and modify our Movie Database as you like.
+              Add and modify our {location.pathname == '/movies' ? 'Movie' : 'Series'} Database as you like.
               <br />
             </h3>
             <h4
               className="mt-3 font-weight-light"
               style={{ color: 'rgb(255,255,255)' }}
             >
-              Choose your favorite movie too!
+              Choose your favorite too!
               <br />
             </h4>
             <h5
@@ -59,9 +78,11 @@ export default () => {
             </div>
           </div>
         </div>
-        <div className="col-8 d-md-flex flex-row flex-wrap" id="scrollview">
-          <Card data={data} loading={loading} />
-        </div>
+        {!loading && data.length > 0 && (
+          <div className="col-8 d-md-flex flex-row flex-wrap" id="scrollview">
+            <Card data={data} loading={loading} />
+          </div>
+        )}
       </div>
     </div>
   );

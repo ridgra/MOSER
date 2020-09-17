@@ -56,6 +56,7 @@ const resolvers = {
     fetchOneMovie: async (_, args) => {
       const { _id } = args;
       const { data } = await axios.get(baseUrl + _id);
+      await redis.del('movies');
       return data;
     },
   },
