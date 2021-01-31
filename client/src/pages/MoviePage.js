@@ -8,7 +8,7 @@ import { FETCH_SERIES } from '../store/queries/series';
 export default () => {
   const history = useHistory();
   const location = useLocation();
-  console.log(history);
+  // console.log(history);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 

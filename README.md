@@ -1,22 +1,33 @@
-## Week-2 Day 4
+## MOSER
 
-- Challenge Pagi
-  - kerjakan di folder `server/expressApp`
-- SIANG: 
-  - pisahkan app yang kalian buat tadi pagi menjadi arsitektur microservice:
-  - orchestrator: kerjakan di folder `server/orchestrator` berupa aplikasi express.js PORT 5000
-  - service movies: kerjakan di folder `server/movies` berupa aplikasi express.js PORT 5001
-  - service series: kerjakan di folder `server/series berupa aplikasi express.js PORT 5002
+**MOSER** is a simple web app for Hacktiv8's bootcamp weekly assignment. MOSER features CRUD data for movies and tv series. Users can also add their favorite movie or tv series. The system is built by applying the concept of microservices.
 
-## Week-2 Day 5
+**Demo: https://bit.ly/39sbt6y**
 
-- Challenge Pagi:
-  - kerjakan di folder `server/orchestrator`, aplikasi berupa apollo server (atau digabung dengan express) PORT 5000
-  - kerjakan di folder `server/movies`, aplikasi berupa express PORT 5001
-  - kerjakan di folder `server/series`, aplikasi berupa express PORT 5002
-- Challenge Siang:
-  - kerjakan di folder `client`, aplikasi berupa react + apollo client 
 
-## Week-3 Day 1
 
-- lanjut kerjakan di folder `client`
+## Front-End
+
+**Features:**
+
+- **Create React App** to build a single page app
+- **Apollo Client**  as a GraphQL management for fetch and state management
+
+## Back-End
+
+**Features**:
+
+- **Microservices**. 
+  - http://localhost:5000/ is API Orchestration
+  - http://localhost:5001/movies is a microservice for CRUD movies
+  - http://localhost:5002/series is a microservice for CRUD tv series
+- **Apollo Server** as GraphQL server for API Orchestration
+- **Express** as microservice server
+- **MongoDB** as a database program for data movies and series
+- **Redis** as a database cache
+
+## Deployment
+
+**Front-End**: Amazon S3
+
+**Back-End**: Amazon EC2
